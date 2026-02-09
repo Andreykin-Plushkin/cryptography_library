@@ -1,4 +1,5 @@
 
+#include <stdio.h>
 #include <stdint.h>
 
 
@@ -6,6 +7,6 @@
 
 #define LIB_H_
 
-uint64_t mod_exp(uint64_t base, uint64_t exp, uint64_t m);
+uint64_t mod_exp(int base, int exp, int m);
 
 #endif

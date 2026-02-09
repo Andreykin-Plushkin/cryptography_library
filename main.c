@@ -6,16 +6,16 @@
 
 int main() {
 
-    uint64_t base, exp, mod;
+    int base, exp, mod;
 
     printf("Write base:");
-    scanf("%lu", &base);
+    scanf("%d", &base);
 
     printf("Write exp:");
-    scanf("%lu", &exp);
+    scanf("%d", &exp);
     
     printf("Write mod:");
-    scanf("%lu", &mod);
+    scanf("%d", &mod);
  
     uint64_t result = mod_exp(base, exp, mod);
 

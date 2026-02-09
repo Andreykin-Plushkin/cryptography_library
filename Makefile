@@ -7,13 +7,17 @@ OBJECTS=*.o
 EXECUTABLE=main
 
 
-all: build clean
+all: clean build
 	./$(EXECUTABLE)
 	
+git: clean
+	git add .
+	git commit
+	git push
 
 build:
 	$(CC) $(CFLAGS) $(SOURCES)
 	$(CC) $(OBJECTS) -o main 
 
 clean:
-	rm -f *.o
+	rm -f *.o $(EXECUTABLE)

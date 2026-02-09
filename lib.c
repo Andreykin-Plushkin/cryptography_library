@@ -1,10 +1,15 @@
 #include "lib.h"
 
 
-uint64_t mod_exp(uint64_t base, uint64_t exp, uint64_t m) {
+uint64_t mod_exp(int base, int exp, int m) {
 
   uint64_t result = 1;
   uint64_t temp   = base % m;
+
+  if (base <= 0 || exp <= 0 || m <= 0) {
+    perror("Numbers don't should be negative!");
+    return -1;
+  }
 
   while (exp != 0) {
 
