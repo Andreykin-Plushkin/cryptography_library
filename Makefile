@@ -17,7 +17,7 @@ git: clean
 
 build:
 	$(CC) $(CFLAGS) $(SOURCES)
-	$(CC) $(OBJECTS) -o main 
+	$(CC) $(OBJECTS) -o $(EXECUTABLE) 
 
 clean:
 	rm -f *.o $(EXECUTABLE)
