@@ -9,6 +9,7 @@ void test_gcd();
 void test_gcd_extended();
 void test_DiffieHellman();
 void test_Shamir();
+void test_Elgamal();
 
 int main() {
 
@@ -19,6 +20,7 @@ int main() {
   test_gcd_extended();
   test_DiffieHellman();
   test_Shamir();
+  test_Elgamal();
 
   return 0;
 }
@@ -124,5 +126,36 @@ void test_Shamir() {
 
   if (x4 == m) {
     printf("\t==> x4 == m | %ld == %ld\n", x4, m);
+  }
+}
+
+void test_Elgamal() {
+
+  uint64_t p = 23;
+  uint64_t g = 5;
+  uint64_t m = 15;
+
+  ElgamalStruct A, B;
+
+  Elgamal_init(&A, p, g);
+  Elgamal_init(&B, p, g);
+
+  Elgamal_print_struct(A);
+  Elgamal_print_struct(B);
+
+  ElgamalMessageStruct message;
+
+  Elgamal_make_message(A, B.d, m, &message);
+
+  Elgamal_print_message(message);
+
+  printf("Decrypting message...\n");
+
+  uint64_t decrypted_message = Elgamal_message_decrypt(B, message);
+
+  printf("Decrypted message = (%ld)\n", decrypted_message);
+
+  if (m == decrypted_message) {
+    printf("m == decrypted_message | (%ld) == (%ld)\n", m, decrypted_message);
   }
 }
