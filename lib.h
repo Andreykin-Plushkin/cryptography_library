@@ -23,6 +23,17 @@ typedef struct {
   int64_t shared_secret;
 } DiffieHellmanStruct;
 
+typedef struct {
+  int64_t p;
+  int64_t c;
+  int64_t d; // cd mod (p-1) = 1
+} ShamirStruct;
+
+void Shamir_init(ShamirStruct *object, int64_t p,
+                 int64_t c); // init ShamirStruct
+
+void Shamir_print_struct(ShamirStruct object);
+
 uint64_t mod_exp(int64_t base, int64_t exp,
                  int64_t m); // | (base^exp) (mod m) right-to-left
 uint64_t gcd(int a, int b);  // Euclidean alogitm GCD(a, b)

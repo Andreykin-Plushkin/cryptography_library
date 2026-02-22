@@ -1,12 +1,14 @@
 
 #include "lib.h"
 
+#include <stdint.h>
 #include <stdio.h>
 
 void test_mod_exp();
 void test_gcd();
 void test_gcd_extended();
 void test_DiffieHellman();
+void test_Shamir();
 
 int main() {
 
@@ -16,6 +18,7 @@ int main() {
   test_gcd();
   test_gcd_extended();
   test_DiffieHellman();
+  test_Shamir();
 
   return 0;
 }
@@ -91,4 +94,35 @@ void test_DiffieHellman() {
 
   DiffieHellman_print_object(A);
   DiffieHellman_print_object(B);
+}
+
+void test_Shamir() {
+
+  int64_t p = 23;
+
+  int64_t m = 10;
+
+  ShamirStruct A, B;
+
+  Shamir_init(&A, p, 7);
+  Shamir_init(&B, p, 5);
+
+  Shamir_print_struct(A);
+  Shamir_print_struct(B);
+
+  assert((m < p) && "[ERROR] m > p");
+
+  int64_t x1 = mod_exp(m, A.c, A.p);
+  int64_t x2 = mod_exp(x1, B.c, B.p);
+  int64_t x3 = mod_exp(x2, A.d, A.p);
+  int64_t x4 = mod_exp(x3, B.d, B.p);
+
+  printf("x1 = (%ld^%ld mod %ld) = %ld\n", m, A.c, A.p, x1);
+  printf("x2 = (%ld^%ld mod %ld) = %ld\n", x1, B.c, B.p, x2);
+  printf("x3 = (%ld^%ld mod %ld) = %ld\n", x2, A.d, A.p, x3);
+  printf("x4 = (%ld^%ld mod %ld) = %ld\n", x3, B.d, B.p, x4);
+
+  if (x4 == m) {
+    printf("\t==> x4 == m | %ld == %ld\n", x4, m);
+  }
 }
