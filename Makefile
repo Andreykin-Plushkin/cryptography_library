@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-c -Wall -Wextra -Werror
 
-SOURCES=*.c
+SOURCES=sources/*.c
 OBJECTS=*.o
 
 EXECUTABLE=main
@@ -16,7 +16,7 @@ git: clean
 	git push
 
 build:
-	$(CC) $(CFLAGS) $(SOURCES)
+	$(CC) $(CFLAGS) lib.c $(EXECUTABLE).c $(SOURCES)
 	$(CC) $(OBJECTS) -o $(EXECUTABLE) 
 
 clean:
