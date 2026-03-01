@@ -10,17 +10,22 @@ void test_gcd_extended();
 void test_DiffieHellman();
 void test_Shamir();
 void test_Elgamal();
+void test_rsa();
+
+#define SIZE_BUFFER 10
 
 int main() {
 
   srand(time(NULL));
 
-  test_mod_exp();
-  test_gcd();
-  test_gcd_extended();
-  test_DiffieHellman();
-  test_Shamir();
-  test_Elgamal();
+  // test_mod_exp();
+  // test_gcd();
+  // test_gcd_extended();
+  // test_DiffieHellman();
+  // test_Shamir();
+  // test_Elgamal();
+
+  test_rsa();
 
   return 0;
 }
@@ -158,4 +163,49 @@ void test_Elgamal() {
   if (m == decrypted_message) {
     printf("m == decrypted_message | (%ld) == (%ld)\n", m, decrypted_message);
   }
+}
+
+void test_rsa() {
+
+  int16_t p;
+  int16_t q;
+
+  RsaStruct A, B;
+
+  char message[SIZE_BUFFER];
+
+  uint64_t encrypted_message[SIZE_BUFFER];
+
+  for (size_t i = 0; i < SIZE_BUFFER; i++) {
+    encrypted_message[i] = 0;
+  }
+
+  char decrypted_message[SIZE_BUFFER];
+
+  printf("Write p and q:");
+  scanf("%hd %hd", &p, &q);
+
+  printf("Write message (Max length = %d):", SIZE_BUFFER - 1);
+  scanf("%s", message);
+
+  RsaStruct_init(p, q, &A);
+  RsaStruct_init(p, q, &B);
+
+  RsaStruct_print(A);
+  RsaStruct_print(B);
+
+  RsaOpenKeyStruct open_key_A;
+
+  open_key_A.n = A.n;
+  open_key_A.e = A.e;
+
+  printf("----- Crypt Message -----\n");
+  rsa_crypt_message(open_key_A, message, encrypted_message, SIZE_BUFFER);
+  printf("-------------------------\n");
+
+  printf("----- Decrypt message -----\n");
+  rsa_decrypt_message(B, encrypted_message, decrypted_message, SIZE_BUFFER);
+  printf("---------------------------\n");
+
+  printf("[Decrypt message] '%s'\n", decrypted_message);
 }

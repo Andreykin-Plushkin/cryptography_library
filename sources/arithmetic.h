@@ -13,6 +13,8 @@ typedef struct {
   int64_t y;
 } EuclidVector; // g = ax + by
 
+int isPrime(int64_t number);
+
 uint64_t gcd(int a, int b);
 uint64_t mod_exp(int64_t base, int64_t exp, int64_t m);
 

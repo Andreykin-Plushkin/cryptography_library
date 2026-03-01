@@ -1,6 +1,16 @@
 
 #include "arithmetic.h"
 
+int isPrime(int64_t number) { // poor implementation
+
+  for (int64_t i = 2; i < number / 2; i++) {
+    if (number % i == 0) {
+      return 0;
+    }
+  }
+  return 1;
+}
+
 uint64_t mod_exp(int64_t base, int64_t exp, int64_t m) {
 
   assert((base > 0 && exp > 0 && m > 0) && "Numbers don't should be negative!");

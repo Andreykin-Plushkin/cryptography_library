@@ -8,6 +8,7 @@
 #include "sources/arithmetic.h"
 #include "sources/diffiehellman.h"
 #include "sources/elgamal.h"
+#include "sources/rsa.h"
 #include "sources/shamir.h"
 
 #ifndef LIB_H_
