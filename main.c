@@ -11,6 +11,7 @@ void test_DiffieHellman();
 void test_Shamir();
 void test_Elgamal();
 void test_rsa();
+void test_vernam();
 
 #define SIZE_BUFFER 10
 
@@ -24,8 +25,9 @@ int main() {
   // test_DiffieHellman();
   // test_Shamir();
   // test_Elgamal();
+  // test_rsa();
 
-  test_rsa();
+  test_vernam();
 
   return 0;
 }
@@ -208,4 +210,16 @@ void test_rsa() {
   printf("---------------------------\n");
 
   printf("[Decrypt message] '%s'\n", decrypted_message);
+}
+
+void test_vernam() {
+
+  String *text = init_string();
+
+  printf("Write string:");
+  input_string(text);
+
+  print_string(text);
+
+  free_string(text);
 }
