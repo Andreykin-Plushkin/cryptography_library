@@ -1,5 +1,6 @@
 
 #include "lib.h"
+#include "sources/vernam.h"
 
 #include <stdint.h>
 #include <stdio.h>
@@ -215,11 +216,26 @@ void test_rsa() {
 void test_vernam() {
 
   String *text = init_string();
+  VernamKey *key = vernam_init_key();
 
   printf("Write string:");
   input_string(text);
 
-  print_string(text);
+  vernam_generate_key(key, text->length);
+
+  vernam_print_key(key);
+
+  String *encrypted_message = vernam_encryption(text, key);
+
+  printf("[encrypted_message]: '\x1b[38;2;3;252;248m%s\x1b[m'\n",
+         encrypted_message->string);
+
+  String *decrypted_message = vernam_decryption(encrypted_message, key);
+
+  printf("[decrypted_message]: '\x1b[38;2;3;252;248m%s\x1b[m'\n",
+         decrypted_message->string);
 
   free_string(text);
+  free_string(encrypted_message);
+  free_string(decrypted_message);
 }

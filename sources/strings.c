@@ -47,13 +47,6 @@ void string_add_char(String *str, char symbol) {
   str->length = str->length + 1;
 }
 
-void print_string(const String *str) {
-
-  for (size_t i = 0; str->string[i] != '\0'; i++) {
-    printf("addr: %p <- %c\n", &(str->string[i]), str->string[i]);
-  }
-}
-
 void free_string(String *str) {
 
   str->length = 0;

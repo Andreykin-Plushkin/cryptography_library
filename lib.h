@@ -15,5 +15,6 @@
 #include "sources/rsa.h"
 #include "sources/shamir.h"
 #include "sources/strings.h"
+#include "sources/vernam.h"
 
 #endif

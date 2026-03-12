@@ -17,8 +17,6 @@ void string_add_char(String *str, char symbol);
 
 void input_string(String *str);
 
-void print_string(const String *str);
-
 void free_string(String *str);
 
 #endif
