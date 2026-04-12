@@ -1,5 +1,8 @@
 
 #include "lib.h"
+#include "sources/file_operations.h"
+#include "sources/gost_28147.h"
+#include "sources/strings.h"
 #include "sources/vernam.h"
 
 #include <stdint.h>
@@ -13,6 +16,7 @@ void test_Shamir();
 void test_Elgamal();
 void test_rsa();
 void test_vernam();
+void test_gost();
 
 #define SIZE_BUFFER 10
 
@@ -27,8 +31,8 @@ int main() {
   // test_Shamir();
   // test_Elgamal();
   // test_rsa();
-
-  test_vernam();
+  // test_vernam();
+  test_gost();
 
   return 0;
 }
@@ -75,6 +79,7 @@ void test_gcd_extended() {
   scanf("%d", &b);
 
   EuclidVector temp;
+
   gcd_extended(a, b, &temp);
 
   EuclidVector_print(temp);
@@ -110,7 +115,7 @@ void test_Shamir() {
 
   int64_t p = 23;
 
-  int64_t m = 10;
+  int64_t m = 61;
 
   ShamirStruct A, B;
 
@@ -139,7 +144,7 @@ void test_Shamir() {
 
 void test_Elgamal() {
 
-  uint64_t p = 23;
+  uint64_t p = 9;
   uint64_t g = 5;
   uint64_t m = 15;
 
@@ -216,6 +221,7 @@ void test_rsa() {
 void test_vernam() {
 
   String *text = init_string();
+
   VernamKey *key = vernam_init_key();
 
   printf("Write string:");
@@ -238,4 +244,63 @@ void test_vernam() {
   free_string(text);
   free_string(encrypted_message);
   free_string(decrypted_message);
+}
+
+void test_gost() {
+
+  uint8_t key_bytes[KEY_SIZE] = {
+      0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xAA,
+      0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55,
+      0x66, 0x77, 0x88, 0x99, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF};
+
+  uint8_t iv[BLOCK_SIZE] = {0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF};
+
+  gost_key_t key;
+  gost_set_key(&key, key_bytes);
+
+  String *message = init_string();
+  String *encoded_text = init_string();
+  String *decoded_text = init_string();
+
+  read_file_to_string("message.txt", message);
+
+  printf("----- Original message -----\n");
+  printf("[%s]\n", message->string);
+  printf("----------------------------\n");
+
+  size_t len = pkcs7_pad(message->string, message->length);
+  extend_size_string(message, len - message->length);
+
+  extend_size_string(decoded_text, len - 1);
+
+  // CBC
+  gost_cbc_encrypt(message->string, encoded_text->string, len, &key, iv);
+  printf("Зашифровано %zu байт. Режим: CBC\n", len);
+  gost_cbc_decrypt(encoded_text->string, decoded_text->string, len, &key, iv);
+
+  printf("----- Encrypted message CBC (hex) -----\n");
+  for (size_t i = 0; i < message->length; ++i) {
+    printf("%02X", (unsigned char)message->string[i]);
+  }
+  printf("\n\n");
+
+  printf("----- Decrypted message -----\n");
+  printf("[%s]\n", decoded_text->string);
+  printf("-----------------------------\n");
+
+  // ECB
+  gost_ecb_encrypt(message->string, encoded_text->string, len, &key);
+  gost_ecb_decrypt(encoded_text->string, decoded_text->string, len, &key);
+
+  printf("----- Encrypted message ECB (hex) -----\n");
+  for (size_t i = 0; i < message->length; ++i) {
+    printf("%02X", (unsigned char)encoded_text->string[i]);
+  }
+  printf("\n\n");
+
+  printf("----- Decrypted message -----\n");
+  printf("[%s]\n", decoded_text->string);
+  printf("-----------------------------\n");
+
+  free_string(message);
 }
